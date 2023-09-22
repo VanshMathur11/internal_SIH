@@ -1,4 +1,5 @@
 const Organization = require('../models/organization')
+const Request = require('../models/request');
 const BigPromise = require('../middlewares/bigPromise'); 
 const CustomError = require('../utils/customError');
 const cookieToken = require('../utils/cookieToken');
@@ -69,10 +70,20 @@ exports.logout = BigPromise(async(req,res,next) => {
 exports.getRequests = BigPromise(async(req,res,next) => {
 
 
-    console.log("fetching all the requests")
+
+    const organization = await Organization.findOne({"name" :req.user.name });
+
+
+    if(!organization) {
+            return next(new CustomError('No such organization found', 400));
+    }
+
+    const allRequests = await Request.find({"organisationName" : organization.name});
+
 
     res.status(200).json({
-        message : "Here you will get all your pending requests."
+        message : "Here you will get all your pending requests.",
+        allRequests
     })
 
 
@@ -81,21 +92,35 @@ exports.getRequests = BigPromise(async(req,res,next) => {
 
 exports.generate = BigPromise(async(req,res,next) => {
 
-    const {info} = req.body;
+    const {studentId, courseName} = req.body;
+
+    console.log(studentId, courseName);
+
+
+    const Students = mongoose.model('students', {});
+    const currentStudent = await Students.find({$and : [ {"studentId" : studentId},  {"courseName" : courseName}]});
+
+
+
+
+    if(!currentStudent) {
+        return next(new CustomError('No such student found', 400));
+    }
+    
+
+
+
 
    
-    const Students = mongoose.model('students', {});
-
-    const student = await Students.findOne({studentId: 2});
-
-    console.log(student)
+    // const Students = mongoose.model('students', {});
+    // const student = await Students.findOne({studentId: 2});
+    // console.log(student)
 
 
-
-    console.log(info);
 
     res.status(200).json({
-        message : "Here is your certificate which we have mailed to your emailId."
+        message : "Here is your certificate which we have mailed to your emailId.",
+        currentStudent
     })
 
 })

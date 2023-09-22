@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Request = require('../models/request')
 const BigPromise = require('../middlewares/bigPromise'); 
 const CustomError = require('../utils/customError');
 const cookieToken = require('../utils/cookieToken');
@@ -65,10 +66,23 @@ exports.logout = BigPromise(async(req,res,next) => {
 
 exports.requestCertificate = BigPromise(async(req,res,next) => {
 
-    const {courseId, organisationName} = req.body;
+    const {studentId, courseName, organisationName} = req.body;
+
+    console.log(studentId, courseName, organisationName);
 
 
-    console.log(courseId, organisationName);
+    if(!studentId || !courseName || !organisationName) {
+        return next(new CustomError('Fields are mandatory', 400))
+    }
+
+    const request = await Request.create({
+        studentId,
+        courseName,
+        organisationName,
+    })
+
+
+
 
     res.status(200).json({
         message : "Your request has been sent to the organization."
@@ -76,6 +90,8 @@ exports.requestCertificate = BigPromise(async(req,res,next) => {
     
 
 })
+
+
 
 
 
