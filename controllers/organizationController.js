@@ -32,6 +32,9 @@ exports.signup= BigPromise(async (req,res, next) => {
 exports.login = BigPromise(async(req,res, next) => {
     const { email, password } = req.body
 
+
+    console.log(req.body)
+
     if(!email || !password) {
         return next(new CustomError('Fields are mandatory', 400))
     }

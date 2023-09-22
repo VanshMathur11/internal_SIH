@@ -29,11 +29,16 @@ exports.signup= BigPromise(async (req,res, next) => {
 exports.login = BigPromise(async(req,res, next) => {
     const { email, password } = req.body
 
+
+    console.log(req.body);
+    
+
     if(!email || !password) {
         return next(new CustomError('Fields are mandatory', 400))
     }
 
-    const user = await User.findOne({email}).select("+password")         
+    const user = await User.findOne({email}).select("+password")   
+    // console.log(user)      
 
     if(!user) {
         return next(new CustomError('You are not registered with us.', 400))
