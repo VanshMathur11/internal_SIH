@@ -1,4 +1,5 @@
 const Organization = require('../models/organization')
+const mailHelper = require('../utils/emailHelper');
 const Request = require('../models/request');
 const BigPromise = require('../middlewares/bigPromise'); 
 const CustomError = require('../utils/customError');
@@ -107,6 +108,24 @@ exports.generate = BigPromise(async(req,res,next) => {
         return next(new CustomError('No such student found', 400));
     }
     
+    // const message = currentStudent;
+
+
+    // try {
+    //     await mailHelper({
+    //         email : user.email,
+    //         subject : 'Please find your certificate',
+    //         message
+    //     })
+
+    //     res.status(200).send({
+    //         success : true,
+    //         message : 'Mail was send successfully'
+    //     })
+
+    // }catch(error) {
+    //     return next(new CustomError(error.message, 500))
+    // }
 
 
 
