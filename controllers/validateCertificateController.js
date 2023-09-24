@@ -1,9 +1,11 @@
 const BigPromise = require('../middlewares/bigPromise'); 
+const CustomError = require('../utils/customError');
 
 
 exports.validateCertificate= BigPromise(async (req,res, next) => {            
     
 
+    console.log(req.body)
     const {transactionHash} = req.body;
 
 
