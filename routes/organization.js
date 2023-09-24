@@ -20,8 +20,10 @@ const {
 router.route('/signup').post(signup)
 router.route('/login').post(login)
 router.route('/logout').get(logout)
-router.route('/getRequests').get(isLoggedIn, getRequests)
+router.route('/getRequests').post(isLoggedIn, getRequests)
 router.route('/generate').post(isLoggedIn, generate)
+// router.route("/generate").post(generate);
+
 
 
 

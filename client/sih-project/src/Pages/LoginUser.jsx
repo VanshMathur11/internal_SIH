@@ -12,6 +12,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import Navbar2 from "../Components/Navbar2";
 
 export default function LoginUser() {
   const [email, setEmail] = useState("");
@@ -32,11 +33,13 @@ export default function LoginUser() {
           password: password,
         }),
       });
-      // let resJson = await res.json();
+      let resJson = await res.json();
       if (res.status === 200) {
         setEmail("");
         setPassword("");
         setMessage("User login successful");
+        console.log(resJson)
+        localStorage.setItem('token', resJson.token)
       } else {
         setMessage("Some error occured");
       }
@@ -45,6 +48,8 @@ export default function LoginUser() {
     }
   };
   return (
+    <>
+      <Navbar2 />
     <Flex
       minH={"100vh"}
       align={"center"}
@@ -112,6 +117,7 @@ export default function LoginUser() {
           </form>
         </Box>
       </Stack>
-    </Flex>
+      </Flex>
+      </>
   );
 }

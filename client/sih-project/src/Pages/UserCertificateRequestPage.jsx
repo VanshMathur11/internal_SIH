@@ -12,12 +12,16 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import Cards from "../Components/Cards";
+import Navbar2 from "../Components/Navbar2";
+  
 
 export default function UserCertificateRequestPage() {
   const [studentid, setStudentId] = useState("");
   const [courseName, setCourseName] = useState("");
   const [organization,setOrganization] = useState("");
-  const [message,setMessage]=useState('');
+  const [message, setMessage] = useState('');
+  const [popup, setPopup] = useState("");
 
 //coursename organization
 //student id course name
@@ -31,17 +35,21 @@ export default function UserCertificateRequestPage() {
           "Content-Type": "application/json"
       },
         body: JSON.stringify({
-          studentid:studentid,
+          studentId:studentid,
           courseName: courseName,
-          organization: organization,
+          organisationName: organization,
+          token : localStorage.getItem('token')
         }),
       });
-      // let resJson = await res.json();
+      let resJson = await res.json();
       if (res.status === 200) {
         setStudentId("");
         setCourseName("");
         setOrganization("");
         setMessage("User created successfully");
+        console.log(resJson)
+        setPopup(resJson.message);
+
       } else {
         setMessage("Some error occured");
       }
@@ -51,6 +59,8 @@ export default function UserCertificateRequestPage() {
     
   }
   return (
+    <>
+      <Navbar2 />
     <Flex
       minH={"100vh"}
       align={"center"}
@@ -74,17 +84,29 @@ export default function UserCertificateRequestPage() {
             <Stack spacing={4}>
               <FormControl id="s-id">
                 <FormLabel>Enter student ID</FormLabel>
-                <Input type="text" value={studentid} onChange={({target})=>setStudentId(target.value)} />
+                <Input
+                  type="text"
+                  value={studentid}
+                  onChange={({ target }) => setStudentId(target.value)}
+                />
               </FormControl>
               <FormControl id="s-id">
                 <FormLabel>Enter Course Name</FormLabel>
-                <Input type="text" value={courseName} onChange={({target})=>setCourseName(target.value)} />
+                <Input
+                  type="text"
+                  value={courseName}
+                  onChange={({ target }) => setCourseName(target.value)}
+                />
               </FormControl>
               <FormControl id="s-id">
                 <FormLabel>Enter Organization Name</FormLabel>
-                <Input type="text" value={organization} onChange={({target})=>setOrganization(target.value)} />
+                <Input
+                  type="text"
+                  value={organization}
+                  onChange={({ target }) => setOrganization(target.value)}
+                />
               </FormControl>
-              
+
               <Stack spacing={10}>
                 <Button
                   type="submit"
@@ -99,13 +121,17 @@ export default function UserCertificateRequestPage() {
               </Stack>
             </Stack>
             <Box>
-              {message? <Heading as="h5" size="sm">
-                Directing....
-              </Heading>:null}
+              {message ? (
+                <Heading as="h5" size="sm">
+                  Directing....
+                </Heading>
+              ) : null}
             </Box>
           </form>
+          {popup ? <Cards obj={popup} /> : null}
         </Box>
       </Stack>
-    </Flex>
+      </Flex>
+      </>
   );
 }

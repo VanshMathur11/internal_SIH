@@ -12,10 +12,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import Cards_2 from "../Components/Cards_2";
+import Navbar2 from "../Components/Navbar2";
 
 export default function CertificateValidationPage() {
   const [id, setId] = useState("");
   const [message, setMessage] = useState("");
+  const [popup, setPopup] = useState({})
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -30,8 +33,10 @@ export default function CertificateValidationPage() {
           transactionHash: id,
         }),
       });
-      // let resJson = await res.json();
+      let resJson = await res.json();
       if (res.status === 200) {
+        alert(resJson.myData["0"] + " " + resJson.myData["1"] + " " + resJson.myData["2"] + " " + resJson.myData["3"] + " " + resJson.myData["4"])
+        setPopup(resJson.myData)
         setMessage("User created successfully");
       } else {
         setMessage("Some error occured");
@@ -41,6 +46,8 @@ export default function CertificateValidationPage() {
     }
   };
   return (
+    <>
+      <Navbar2  />
     <Flex
       minH={"100vh"}
       align={"center"}
@@ -88,8 +95,10 @@ export default function CertificateValidationPage() {
               ) : null}
             </Box>
           </form>
+          {popup ? <Cards_2 obj={popup} /> : null}
         </Box>
       </Stack>
-    </Flex>
+      </Flex>
+      </>
   );
 }

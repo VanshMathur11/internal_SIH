@@ -1,8 +1,11 @@
 import { Box, Heading, Container, Text, Button, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import Navbar from "./Components/Navbar";
+
 export default function Hero() {
   return (
     <>
+      <Navbar />
       <Container maxW={"3xl"}>
         <Stack
           as={Box}
@@ -15,7 +18,7 @@ export default function Hero() {
             fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }}
             lineHeight={"110%"}
           >
-            TrustLink: Empowering Credentials
+            TrustLink: Your Certificate Partner
             <br />
             <Text as={"span"} color={"green.400"}>
               with Blockchain Trust
@@ -37,7 +40,7 @@ export default function Hero() {
             alignSelf={"center"}
             position={"relative"}
           >
-            <Link to="/user-login">
+            <Link to="/organization-certificate-generation">
               <Button
                 colorScheme={"green"}
                 bg={"green.400"}
@@ -46,7 +49,9 @@ export default function Hero() {
                 _hover={{
                   bg: "green.500",
                 }}
-              >Get Started</Button>
+              >
+                Get Started
+              </Button>
             </Link>
           </Stack>
         </Stack>

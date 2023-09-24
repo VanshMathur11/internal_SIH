@@ -12,11 +12,14 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import Cards from "../Components/Cards";
+import Navbar2 from "../Components/Navbar2";
 
 export default function OrganizationCertificateGeneration() {
   const [studentid, setStudentId] = useState("");
   const [courseName, setCourseName] = useState("");
-  const [message,setMessage]=useState('');
+  const [message, setMessage] = useState('');
+  const [popup, setPopup] = useState('');
 
 //student id course name
   const handleCertificateRequest= async(event)=>{
@@ -34,12 +37,13 @@ export default function OrganizationCertificateGeneration() {
           token : localStorage.getItem('token'),
         }),
       });
-      // let resJson = await res.json();
+      let resJson = await res.json();
       if (res.status === 200) {
         setStudentId("");
         setCourseName("");
         setMessage("User created successfully");
-        console.log(res.body)
+        alert(resJson.txnHash);
+        setPopup(resJson.txnHash);
       } else {
         setMessage("Some error occured");
       }
@@ -49,6 +53,7 @@ export default function OrganizationCertificateGeneration() {
     
   }
   return (
+    <>
     <Flex
       minH={"100vh"}
       align={"center"}
@@ -72,13 +77,21 @@ export default function OrganizationCertificateGeneration() {
             <Stack spacing={4}>
               <FormControl id="s-id">
                 <FormLabel>Enter student ID</FormLabel>
-                <Input type="text" value={studentid} onChange={({target})=>setStudentId(target.value)} />
+                <Input
+                  type="text"
+                  value={studentid}
+                  onChange={({ target }) => setStudentId(target.value)}
+                />
               </FormControl>
               <FormControl id="s-id">
                 <FormLabel>Enter Course Name</FormLabel>
-                <Input type="text" value={courseName} onChange={({target})=>setCourseName(target.value)} />
+                <Input
+                  type="text"
+                  value={courseName}
+                  onChange={({ target }) => setCourseName(target.value)}
+                />
               </FormControl>
-              
+
               <Stack spacing={10}>
                 <Button
                   type="submit"
@@ -93,13 +106,17 @@ export default function OrganizationCertificateGeneration() {
               </Stack>
             </Stack>
             <Box>
-              {message? <Heading as="h5" size="sm">
-                Directing....
-              </Heading>:null}
+              {message ? (
+                <Heading as="h5" size="sm">
+                  Directing....
+                </Heading>
+              ) : null}
             </Box>
           </form>
+          {popup ? <Cards obj={popup} /> : null }
         </Box>
       </Stack>
-    </Flex>
+      </Flex>
+      </>
   );
 }

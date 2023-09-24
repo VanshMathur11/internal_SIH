@@ -1,6 +1,14 @@
 const nodemailer = require("nodemailer");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
 
-const mailHelper = async(option) => {
+const mailHelper = async (option) => {
+  
+
+  const doc = new PDFDocument();
+  doc.pipe(fs.createWriteStream("output.pdf"));
+  doc.fontSize(25).text(option.message, 100, 100);
+  doc.end()
 
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -13,13 +21,25 @@ const mailHelper = async(option) => {
     
       
       const message = {
-        from: "adisingh456@gmail.com", // sender address
+        from: "vanshmathur00@gmail.com", // sender address
         to: option.email, // list of receivers
         subject: option.subject, // Subject line
         text: option.message, // plain text body
+        attachments: [
+          {
+            filename: "output.pdf",
+            path: "output.pdf",
+            contentType: "application/pdf",
+          },
+        ],
       };
+  
+  
+  
 
-      await transporter.sendMail(message)
+    console.log(message)
+
+    await transporter.sendMail(message)
 
 }
 

@@ -12,6 +12,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import Navbar2 from "../Components/Navbar2";
 
 export default function LoginOrganization() {
   const [email, setEmail] = useState("");
@@ -19,35 +20,38 @@ export default function LoginOrganization() {
   const [message, setMessage] = useState("");
 
   const handleSignIn = async (event) => {
+    console.log("triggered me");
     event.preventDefault();
     try {
       let res = await fetch("http://localhost:4000/api/v1/org/login", {
         method: "POST",
         // credentials: 'include',
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
           password: password,
         }),
       });
-      // let resJson = await res.json();
+      let resJson = await res.json();
       if (res.status === 200) {
-        console.log(res.token)
-        localStorage.setItem('token',res.token)
+        console.log(resJson);
+        localStorage.setItem("token", resJson.token);
         setEmail("");
         setPassword("");
         setMessage("User login successful");
       } else {
         // setMessage("Some error occured");
-        console.log("something went wrong")
+        console.log("something went wrong");
       }
     } catch (err) {
       console.log(err);
     }
   };
   return (
+    <>
+      <Navbar2 />
     <Flex
       minH={"100vh"}
       align={"center"}
@@ -92,9 +96,10 @@ export default function LoginOrganization() {
                   justify={"space-between"}
                 >
                   {/* <Checkbox>Remember me</Checkbox> */}
-                  {/* <Text color={"blue.400"}>Forgot password?</Text> */}
+                  {/* <Text color={"blue.400"}>Forgot
+                   password?</Text> */}
                 </Stack>
-                {/* <Link to="/organization-requests"> */}
+                {/* <Link to="/organization-certificate-generation"> */}
                   <Button
                     type="submit"
                     bg={"blue.400"}
@@ -118,6 +123,7 @@ export default function LoginOrganization() {
           </form>
         </Box>
       </Stack>
-    </Flex>
+      </Flex>
+      </>
   );
 }

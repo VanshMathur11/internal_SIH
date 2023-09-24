@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import Navbar2 from "../Components/Navbar2";
 
 export default function SignupUser() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +30,7 @@ export default function SignupUser() {
     event.preventDefault()
     console.log("submitted")
     try {
+      console.log(userName, email, password)
       let res = await fetch("http://localhost:4000/api/v1/usr/signup", {
         method: "POST",
         headers: {
@@ -40,12 +42,14 @@ export default function SignupUser() {
           password: password,
         }),
       });
-      // let resJson = await res.json();
+      let resJson = await res.json();
       if (res.status === 200) {
         setUserName("");
         setEmail("");
         setPassword("");
         setMessage("User created successfully");
+        console.log(resJson);
+        localStorage.setItem("token", resJson.token);
       } else {
         setMessage("Some error occured");
       }
@@ -54,6 +58,8 @@ export default function SignupUser() {
     }
   }
   return (
+    <>
+      <Navbar2 />
     <Flex
       minH={"100vh"}
       align={"center"}
@@ -133,6 +139,7 @@ export default function SignupUser() {
           </form>
         </Box>
       </Stack>
-    </Flex>
+      </Flex>
+      </>
   );
 }

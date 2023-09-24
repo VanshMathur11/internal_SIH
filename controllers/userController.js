@@ -7,7 +7,10 @@ const cookieToken = require('../utils/cookieToken');
 exports.signup= BigPromise(async (req,res, next) => {            
     
 
-    const {name, email, password, } = req.body;
+    const { name, email, password } = req.body;
+    
+    
+    console.log(req.body)
 
 
     if(!email || !name || !password) {
